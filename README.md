@@ -11,7 +11,26 @@ Give it a US-listed ticker and a peer group. In about a minute it:
 
 A **Streamlit web app** puts all of this behind a ticker box, with sliders to stress the assumptions and download buttons for the model and the deck.
 
-> **Live app:** _add your Streamlit link_ · **Showcase:** Nike (NKE) vs Lululemon, Deckers, Crocs, Under Armour, VF Corp, Columbia: _add links to the generated deck and model_
+> **Live app:** _add your Streamlit link_ · **Showcase:** [Nike pitch deck (PDF)](examples/nike/NKE_2026-10-05_pitch_deck.pdf) · [Excel model](examples/nike/NKE_2026-10-05_valuation_model.xlsx) · [PowerPoint](examples/nike/NKE_2026-10-05_pitch_deck.pptx)
+
+## Showcase: Nike (NKE), initiated at HOLD
+
+**HOLD · price target $32.81 vs $33.87 (−3%) · 5 October 2026.** Benchmarked against Lululemon, Deckers, Crocs, Under Armour, VF Corp and Columbia.
+
+- **The turnaround is already in the price.** After a ~54% fall in the share price, the market is discounting EBIT margins rebuilding to ~11% by FY31. That is also our base case, so we see fair value rather than a bargain.
+- **FY27 is a reset year.** Management guides revenue down high-single digits and adjusted EPS of $1.15–1.35; the model takes that as year 1 (−8% revenue, ~5% EBIT margin, 24% tax).
+- **What you have to believe.** If margins stall near 7%, the DCF is worth ~$22. If the ~$2.5bn savings plan restores FY21–24 margins (~13.5%), it is worth ~$59. China (−22% in Q1 FY27) is the swing factor.
+
+| Method | Value per share |
+|---|---|
+| DCF, perpetuity growth (WACC 9.2%, g 2.5%) | $35.57 |
+| DCF, exit multiple (8.7x peer EV/EBITDA) | $32.99 |
+| Trading comps, EV/EBITDA median | $27.09 |
+| **Blended price target (50 / 25 / 25)** | **$32.81** |
+
+![Nike deck pages](docs/img/nke_deck.jpg)
+
+*Assumptions for the Nike case (FY27 guidance, margin path, thesis) live in [`config/runs/nike.yaml`](config/runs/nike.yaml), each with its rationale; every historical number links to its SEC filing in the Excel model's Sources sheet.*
 
 ![App (demo mode, fictional data)](docs/img/app_demo.png)
 
@@ -48,7 +67,6 @@ An analyst's first week on a new name looks the same everywhere: pull the filing
 
 **Pitch deck** (`*_pitch_deck.pptx`): title, investment summary, company snapshot, performance vs peers, benchmark scorecard, industry trends, returns & cash, DCF, WACC, sensitivity, trading comps, football field, scenarios, risks, methodology.
 
-![Deck pages (demo mode, fictional data)](docs/img/deck_demo.jpg)
 
 ## Run it
 
@@ -101,6 +119,7 @@ app.py             Streamlit app
 config/            methodology assumptions + run files (ticker, peers, your own thesis)
 notebooks/         Colab runner
 tests/             fixtures (fictional companies with real-world XBRL quirks) + test suite
+examples/nike/     Nike showcase: Excel model, deck (PPTX + PDF)
 examples/demo/     sample outputs on fictional data
 ```
 
