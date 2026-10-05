@@ -26,21 +26,26 @@ class LiveMarketData(MarketData):
         self.default_rf = default_rf
 
     def prices(self, tickers, years=3):
-        out = {}
+        """Dividend-adjusted closes (for returns and beta). Unadjusted closes are kept in `self.raw_close`
+        for the share price and the 52-week range, so they match what quote pages show."""
+        out, raw = {}, {}
         try:
             import yfinance as yf
-            df = yf.download(tickers, period=f"{years}y", interval="1d", auto_adjust=True, progress=False,
+            df = yf.download(tickers, period=f"{years}y", interval="1d", auto_adjust=False, progress=False,
                              group_by="column", threads=True)
-            close = df["Close"] if isinstance(df.columns, pd.MultiIndex) else df[["Close"]].rename(columns={"Close": tickers[0]})
+            if not isinstance(df.columns, pd.MultiIndex):
+                df.columns = pd.MultiIndex.from_product([df.columns, [tickers[0]]])
             for t in tickers:
-                if t in close and close[t].notna().sum() > 50: out[t] = close[t]
+                if ("Adj Close", t) in df and df[("Adj Close", t)].notna().sum() > 50:
+                    out[t], raw[t] = df[("Adj Close", t)], df[("Close", t)]
         except Exception as e:                                   # network, rate limit or API change
             print(f"[market] yfinance failed ({e}); trying Stooq")
         for t in [t for t in tickers if t not in out]:
             s = _stooq(t, years)
-            if s is not None: out[t] = s
+            if s is not None: out[t] = raw[t] = s
         missing = [t for t in tickers if t not in out]
         if missing: print(f"[market] no price history for: {missing}")
+        self.raw_close = pd.DataFrame(raw).sort_index()
         return pd.DataFrame(out).sort_index()
 
     def risk_free(self):

@@ -278,8 +278,11 @@ def apply_overrides(a: Assumptions, ov: dict | None) -> Assumptions:
 
 
 def value_company(target: str, fins: dict, bench: Benchmark, prices: pd.DataFrame, rf: float, rf_source: str,
-                  cfg: dict, overrides: dict | None = None) -> Valuation:
-    prices_now = {t: float(prices[t].dropna().iloc[-1]) for t in prices.columns if prices[t].notna().any()}
+                  cfg: dict, overrides: dict | None = None, raw_prices: pd.DataFrame | None = None) -> Valuation:
+    quote = prices.copy()
+    if raw_prices is not None and len(raw_prices):
+        for t in raw_prices.columns: quote[t] = raw_prices[t].reindex(quote.index).fillna(quote[t])
+    prices_now = {t: float(quote[t].dropna().iloc[-1]) for t in quote.columns if quote[t].notna().any()}
     caps = {t: prices_now[t] * f.latest["shares"] for t, f in fins.items() if t in prices_now and f.latest["shares"] > 0}
     if target not in caps:
         raise ValueError(f"No price or share count for {target}; can't value it.")
@@ -314,8 +317,8 @@ def value_company(target: str, fins: dict, bench: Benchmark, prices: pd.DataFram
     r = cfg["rating"]
     rating = "BUY" if up > r["buy_above"] else ("SELL" if up < r["sell_below"] else "HOLD")
 
-    s52 = prices[target].dropna(); s52 = s52[s52.index >= s52.index.max() - pd.DateOffset(weeks=52)]
-    ff = [("52-week trading range", s52.min(), s52.max())]
+    s52 = quote[target].dropna(); s52 = s52[s52.index >= s52.index.max() - pd.DateOffset(weeks=52)]
+    ff = [("52-week trading range (closing prices)", s52.min(), s52.max())]
     if "ev_ebitda" in implied: ff.append((f"Trading comps: EV/EBITDA {implied['ev_ebitda']['multiples']['low']:.1f}x–"
                                           f"{implied['ev_ebitda']['multiples']['high']:.1f}x", implied["ev_ebitda"]["low"], implied["ev_ebitda"]["high"]))
     if "pe" in implied: ff.append((f"Trading comps: P/E {implied['pe']['multiples']['low']:.1f}x–{implied['pe']['multiples']['high']:.1f}x",

@@ -157,6 +157,19 @@ class Deck:
 def _pct(x): return fmt(x, "pct")
 
 
+def _short(name, n=24):
+    """'DECKERS OUTDOOR CORP' -> 'Deckers Outdoor'; 'lululemon athletica inc.' -> 'Lululemon Athletica'."""
+    import re
+    words = [w for w in re.split(r"[\s,]+", name) if w and w.rstrip(".").lower() not in ("inc", "corp", "co", "corporation", "company", "ltd", "plc")]
+    merged = []                                   # "V F" -> "VF"
+    for w in words:
+        if len(w) == 1 and merged and len(merged[-1]) <= 2 and merged[-1].isupper(): merged[-1] += w
+        else: merged.append(w)
+    t = " ".join(w if (any(c.islower() for c in w[1:]) or len(w) <= 3) else w.capitalize() for w in merged)
+    t = t[:1].upper() + t[1:]
+    return t if len(t) <= n else t[:n - 1] + "…"
+
+
 def _money(x): return "n/a" if x is None or np.isnan(x) else f"${x:,.2f}"
 
 
@@ -371,7 +384,7 @@ def build_deck(rep, path) -> Path:
     order = [x for x in cp.sort_values("market_cap", ascending=False).index if x != t] + [t]
     for tk in order:
         r = cp.loc[tk]
-        rows.append([f"{tk} · {r['name'][:22]}", _bn(r["market_cap"]), _bn(r["enterprise_value"]), fmt(r["ev_revenue"], "x"),
+        rows.append([f"{tk} · {_short(r['name'])}", _bn(r["market_cap"]), _bn(r["enterprise_value"]), fmt(r["ev_revenue"], "x"),
                      fmt(r["ev_ebitda"], "x"), fmt(r["pe"], "x"), _pct(r["ebit_margin"]), _pct(r["fcf_yield"])])
     pe = cp[~cp["is_target"]]
     rows.append(["Peer median", "", "", fmt(pe["ev_revenue"].median(), "x"), fmt(pe["ev_ebitda"].median(), "x"), fmt(pe["pe"].median(), "x"),

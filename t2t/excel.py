@@ -333,7 +333,7 @@ def build_workbook(rep, path) -> Path:
     V.title_block(f"{f.name} ({f.ticker}): valuation summary", "Football field, blended price target and rating, all linked to the model.")
     V.header(4, ["Method", "Low ($)", "High ($)", "Midpoint ($)", "Basis"])
     s52 = v.week52
-    ff_rows = [("52-week trading range", float(s52[0]), float(s52[1]), "Market data"),
+    ff_rows = [("52-week trading range (closing prices)", float(s52[0]), float(s52[1]), "Market data"),
                ("Trading comps: EV / EBITDA (peer Q1–Q3)", f"=Comps!$D${imp['EV / EBITDA']}", f"=Comps!$F${imp['EV / EBITDA']}", "Comps sheet"),
                ("Trading comps: P / E (peer Q1–Q3)", f"=Comps!$D${imp['P / E']}", f"=Comps!$F${imp['P / E']}", "Comps sheet"),
                ("DCF: perpetuity growth (WACC ±0.5pp, g ±0.25pp)", "=MIN(Sensitivity!$D$9:$F$11)", "=MAX(Sensitivity!$D$9:$F$11)", "Sensitivity sheet"),

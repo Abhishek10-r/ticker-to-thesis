@@ -63,6 +63,7 @@ class Bundle:
     rf: float
     rf_source: str
     warnings: list
+    raw_prices: object = None        # unadjusted closes (share price, 52-week range)
 
 
 def fetch(target: str, peers: list[str], source, market: MarketData | None = None, cfg: dict | None = None, log=print) -> Bundle:
@@ -86,14 +87,15 @@ def fetch(target: str, peers: list[str], source, market: MarketData | None = Non
         warnings.append(f"Peer {t} has no price data: excluded from comps, beta and benchmarking.")
         fins.pop(t)
     if len(fins) < 3: raise ValueError("Need at least two usable peers (with filings and prices).")
-    return Bundle(target, fins, prices, rf, rf_src, warnings)
+    return Bundle(target, fins, prices, rf, rf_src, warnings, getattr(market, "raw_close", None))
 
 
 def analyse(bundle: Bundle, cfg: dict | None = None, overrides: dict | None = None, analyst: str = "",
             analyst_view: dict | None = None, data_note: str = "") -> Report:
     cfg = cfg or load_config()
     b = benchmark(bundle.fins, bundle.target)
-    v = value_company(bundle.target, bundle.fins, b, bundle.prices, bundle.rf, bundle.rf_source, cfg, overrides)
+    v = value_company(bundle.target, bundle.fins, b, bundle.prices, bundle.rf, bundle.rf_source, cfg, overrides,
+                      raw_prices=getattr(bundle, "raw_prices", None))
     return Report(target=bundle.target, peers=[t for t in bundle.fins if t != bundle.target], fins=bundle.fins, bench=b, val=v,
                   cfg=cfg, analyst=analyst, analyst_view=analyst_view or {}, run_date=dt.date.today().isoformat(),
                   data_note=data_note, warnings=list(bundle.warnings))

@@ -18,8 +18,8 @@ This notebook pulls **10-K/10-Q data from SEC EDGAR** for a company and its peer
 Set `DEMO = True` to run offline on fictional companies instead.
 """)
 code("""
-REPO = "https://github.com/YOUR_GITHUB_USERNAME/ticker-to-thesis"   # <- your fork / repo
-SEC_USER_AGENT = "Your Name your.email@example.com"                  # <- required by the SEC
+REPO = "https://github.com/Abhishek10-r/ticker-to-thesis"
+SEC_USER_AGENT = "Your Name your.email@example.com"                  # <- required by the SEC: your name and email
 RUN_FILE = "config/runs/nike.yaml"                                   # ticker, peers, analyst, your own view
 DEMO = False
 
@@ -27,6 +27,7 @@ import os, sys, subprocess
 if not os.path.exists("t2t") and not os.path.exists("ticker-to-thesis"):
     subprocess.run(["git", "clone", "-q", REPO], check=True)
 if os.path.exists("ticker-to-thesis"): os.chdir("ticker-to-thesis")
+subprocess.run(["git", "pull", "-q"])          # pick up the latest version of the code
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements.txt"], check=True)
 sys.path.insert(0, os.getcwd())
 print("ready in", os.getcwd())
