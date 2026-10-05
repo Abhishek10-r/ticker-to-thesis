@@ -1,0 +1,56 @@
+# Market-wide and methodology assumptions. Every number here is an ASSUMPTION: review and update
+# before relying on output. Values flow into the Excel model's Assumptions sheet as editable inputs.
+
+market:
+  equity_risk_premium: 0.045      # US implied ERP; update from Damodaran's latest estimate (pages.stern.nyu.edu/~adamodar)
+  default_risk_free: 0.042        # used only if the live 10-year Treasury yield (FRED DGS10) can't be fetched
+  marginal_tax_rate: 0.25         # US federal 21% + typical state; used for the debt tax shield and beta unlevering
+  market_proxy: SPY
+
+beta:
+  regression_years: 2             # weekly returns vs SPY
+  blume_adjust: true              # adjusted beta = 0.67 x raw + 0.33
+
+dcf:
+  forecast_years: 5
+  terminal_growth: 0.025          # long-run nominal growth; must stay below WACC
+  mid_year_convention: true
+  min_wacc_spread_over_g: 0.02    # sanity floor: WACC - g at least 2pp
+  growth_clip: [-0.10, 0.25]      # bounds on the starting growth rate taken from history
+  margin_blend_peer_weight: 0.5   # year-5 EBIT margin = blend of own 5y average and peer median
+
+# Price target = weighted blend of methods (weights must sum to 1)
+price_target_weights:
+  dcf_perpetuity: 0.50
+  dcf_exit_multiple: 0.25
+  comps_ev_ebitda: 0.25
+
+rating:
+  buy_above: 0.15                 # upside to price target above +15%  -> BUY
+  sell_below: -0.10               # below -10%                         -> SELL, otherwise HOLD
+
+scenarios:                        # shifts applied to the base case
+  bear: {growth: -0.03, margin: -0.02, wacc: 0.01, terminal_growth: -0.005}
+  bull: {growth: 0.03, margin: 0.02, wacc: -0.01, terminal_growth: 0.005}
+
+comps:
+  max_ev_ebitda: 60               # drop meaningless multiples (negative or extreme)
+  max_pe: 100
+
+# Synthetic credit rating from interest coverage (large non-financial firms), with default spread over
+# the risk-free rate. Approximation after Damodaran's table; update annually.
+synthetic_rating:
+  - {min_coverage: 8.5,  rating: AAA, spread: 0.0060}
+  - {min_coverage: 6.5,  rating: AA,  spread: 0.0070}
+  - {min_coverage: 5.5,  rating: A+,  spread: 0.0090}
+  - {min_coverage: 4.25, rating: A,   spread: 0.0105}
+  - {min_coverage: 3.0,  rating: A-,  spread: 0.0120}
+  - {min_coverage: 2.5,  rating: BBB, spread: 0.0150}
+  - {min_coverage: 2.25, rating: BB+, spread: 0.0185}
+  - {min_coverage: 2.0,  rating: BB,  spread: 0.0220}
+  - {min_coverage: 1.75, rating: B+,  spread: 0.0300}
+  - {min_coverage: 1.5,  rating: B,   spread: 0.0365}
+  - {min_coverage: 1.25, rating: B-,  spread: 0.0480}
+  - {min_coverage: 0.8,  rating: CCC, spread: 0.0800}
+  - {min_coverage: 0.5,  rating: CC,  spread: 0.1000}
+  - {min_coverage: -1e9, rating: C,   spread: 0.1200}

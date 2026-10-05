@@ -1,0 +1,16 @@
+# Showcase run: Nike vs athletic & lifestyle footwear/apparel peers (all US-GAAP SEC filers).
+ticker: NKE
+peers: [LULU, DECK, CROX, UAA, VFC, COLM]
+analyst: Abhishek Raut
+
+# Optional: your own view. Leave lists empty to use the model-derived thesis/risks in the deck.
+# Write these AFTER you've looked at the numbers; keep each point to one or two lines.
+analyst_view:
+  thesis: []        # e.g. - "Inventory reset is largely done: ..."
+  catalysts: []     # e.g. - "Q2 FY27 results (Dec): wholesale order book ..."
+  risks: []         # e.g. - "Tariffs on Vietnam/Indonesia sourcing ..."
+
+# Optional: override model assumptions (see valuation.Assumptions), e.g.
+# overrides:
+#   terminal_growth: 0.025
+#   exit_multiple: 14.0
