@@ -11,7 +11,7 @@ Give it a US-listed ticker and a peer group. In about a minute it:
 
 A **Streamlit web app** puts all of this behind a ticker box, with sliders to stress the assumptions and download buttons for the model and the deck.
 
-> **Live app:** _add your Streamlit link_ · **Showcase:** [Nike pitch deck (PDF)](examples/nike/NKE_2026-10-05_pitch_deck.pdf) · [Excel model](examples/nike/NKE_2026-10-05_valuation_model.xlsx) · [PowerPoint](examples/nike/NKE_2026-10-05_pitch_deck.pptx)
+> **Live app:**[ticker-to-thesis.streamlit.app](https://ticker-to-thesis.streamlit.app/) · **Showcase:** [Nike pitch deck (PDF)](examples/nike/NKE_2026-10-05_pitch_deck.pdf) · [Excel model](examples/nike/NKE_2026-10-05_valuation_model.xlsx) · [PowerPoint](examples/nike/NKE_2026-10-05_pitch_deck.pptx)
 
 ## Showcase: Nike (NKE), initiated at HOLD
 
