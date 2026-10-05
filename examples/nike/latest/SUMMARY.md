@@ -6,14 +6,14 @@
 | | Latest | First tracked |
 |---|---|---|
 | Date | 2026-10-05 | 2026-10-05 |
-| Share price | $33.87 | $33.87 |
-| Price target | $32.81 | $32.81 |
-| Upside / (downside) | -3.1% | -3.1% |
+| Share price | $33.12 | $33.12 |
+| Price target | $32.56 | $32.56 |
+| Upside / (downside) | -1.7% | -1.7% |
 | Model rating | **HOLD** | HOLD |
 | WACC (risk-free) | 9.2% (5.24%) | 9.2% (5.24%) |
 | Latest fiscal year / balance sheet | FY2026 / 2026-08-31 | FY2026 |
 
-Valuation: DCF $35.57 (perpetuity) · $32.99 (exit multiple) · comps $27.09 (EV/EBITDA median).
+Valuation: DCF $35.57 (perpetuity) · $32.51 (exit multiple) · comps $26.57 (EV/EBITDA median).
 
 Files: [NKE_valuation_model.xlsx](NKE_valuation_model.xlsx) · [NKE_pitch_deck.pptx](NKE_pitch_deck.pptx) · [NKE_pitch_deck.pdf](NKE_pitch_deck.pdf) · [history.csv](history.csv)
 
