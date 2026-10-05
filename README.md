@@ -11,7 +11,7 @@ Give it a US-listed ticker and a peer group. In about a minute it:
 
 A **Streamlit web app** puts all of this behind a ticker box, with sliders to stress the assumptions and download buttons for the model and the deck.
 
-> **Live app:**[ticker-to-thesis.streamlit.app](https://ticker-to-thesis.streamlit.app/) · **Showcase:** [Nike pitch deck (PDF)](examples/nike/NKE_2026-10-05_pitch_deck.pdf) · [Excel model](examples/nike/NKE_2026-10-05_valuation_model.xlsx) · [PowerPoint](examples/nike/NKE_2026-10-05_pitch_deck.pptx)
+> **Live app:** [ticker-to-thesis.streamlit.app](https://ticker-to-thesis.streamlit.app/) · **Showcase:** [Nike pitch deck (PDF)](examples/nike/NKE_2026-10-05_pitch_deck.pdf) · [Excel model](examples/nike/NKE_2026-10-05_valuation_model.xlsx) · [PowerPoint](examples/nike/NKE_2026-10-05_pitch_deck.pptx)
 
 ## Showcase: Nike (NKE), initiated at HOLD
 
@@ -29,6 +29,8 @@ A **Streamlit web app** puts all of this behind a ticker box, with sliders to st
 | **Blended price target (50 / 25 / 25)** | **$32.81** |
 
 ![Nike deck pages](docs/img/nke_deck.jpg)
+
+**Kept current automatically.** [![weekly-refresh](https://github.com/Abhishek10-r/ticker-to-thesis/actions/workflows/weekly-refresh.yml/badge.svg)](https://github.com/Abhishek10-r/ticker-to-thesis/actions/workflows/weekly-refresh.yml) Every Monday a GitHub Action re-runs the Nike case with the latest SEC filings and prices and commits a fresh model and deck: see the **[latest update](examples/nike/latest/SUMMARY.md)** and the call's **[track record](examples/nike/latest/history.csv)**. If the model's rating drifts away from my published HOLD, the summary flags it. The thesis itself only changes when I update it after earnings.
 
 *Assumptions for the Nike case (FY27 guidance, margin path, thesis) live in [`config/runs/nike.yaml`](config/runs/nike.yaml), each with its rationale; every historical number links to its SEC filing in the Excel model's Sources sheet.*
 
@@ -119,7 +121,7 @@ app.py             Streamlit app
 config/            methodology assumptions + run files (ticker, peers, your own thesis)
 notebooks/         Colab runner
 tests/             fixtures (fictional companies with real-world XBRL quirks) + test suite
-examples/nike/     Nike showcase: Excel model, deck (PPTX + PDF)
+examples/nike/     Nike showcase: Excel model, deck (PPTX + PDF); latest/ is refreshed weekly
 examples/demo/     sample outputs on fictional data
 ```
 

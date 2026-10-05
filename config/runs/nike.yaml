@@ -2,6 +2,7 @@
 ticker: NKE
 peers: [LULU, DECK, CROX, UAA, VFC, COLM]
 analyst: Abhishek Raut
+my_rating: HOLD     # your published call; the weekly update flags it if the model's rating drifts away from this
 
 # Base case anchored to management's FY27 guidance (Q1 FY27 release, 1 Oct 2026), then a margin rebuild
 # as the ~$2.5bn "Pace" savings plan lands by FY31. Year 1 = FY27 ... Year 5 = FY31.

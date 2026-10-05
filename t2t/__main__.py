@@ -21,6 +21,8 @@ def main():
     ap.add_argument("--out", default="output", help="Output folder")
     ap.add_argument("--config", help="Alternative methodology config (default: config/default.yaml)")
     ap.add_argument("--demo", action="store_true", help="Offline demo on fictional fixture companies")
+    ap.add_argument("--track", action="store_true",
+                    help="Fixed file names + SUMMARY.md + history.csv in --out (used by the weekly GitHub Action)")
     args = ap.parse_args()
 
     spec = yaml.safe_load(Path(args.run).read_text()) if args.run else {}
@@ -36,7 +38,10 @@ def main():
     cfg = load_config(args.config, spec.get("config_overrides"))
     rep = run(ticker, peers, source, market, cfg, overrides=spec.get("overrides"), analyst=spec.get("analyst", ""),
               analyst_view={k: v for k, v in (spec.get("analyst_view") or {}).items() if v}, data_note=note)
-    files = write_outputs(rep, args.out)
+    files = write_outputs(rep, args.out, stem=f"{rep.target}" if args.track else None)
+    if args.track:
+        from .track import track
+        track(rep, args.out, files, my_rating=spec.get("my_rating"))
     v = rep.val
     print(f"\n{rep.name} ({rep.target}) · {v.rating} · price target ${v.price_target:,.2f} vs ${v.price:,.2f} ({v.upside:+.1%})")
     for w in rep.warnings: print("  note:", w)

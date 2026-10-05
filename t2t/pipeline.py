@@ -110,11 +110,11 @@ def run(target: str, peers: list[str], source, market: MarketData | None = None,
     return analyse(bundle, cfg, overrides, analyst, analyst_view, data_note)
 
 
-def write_outputs(rep: Report, out_dir: str | Path = "output") -> dict:
+def write_outputs(rep: Report, out_dir: str | Path = "output", stem: str | None = None) -> dict:
     from .deck import build_deck
     from .excel import build_workbook
     out = Path(out_dir); out.mkdir(parents=True, exist_ok=True)
-    stem = f"{rep.target}_{rep.run_date}"
+    stem = stem or f"{rep.target}_{rep.run_date}"
     xlsx = build_workbook(rep, out / f"{stem}_valuation_model.xlsx")
     pptx = build_deck(rep, out / f"{stem}_pitch_deck.pptx")
     return {"excel": xlsx, "deck": pptx}

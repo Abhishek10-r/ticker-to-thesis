@@ -1,0 +1,38 @@
+name: weekly-refresh
+
+# Re-runs the Nike case every Monday with the latest SEC filings and prices, and commits the refreshed
+# model, deck (PPTX + PDF), SUMMARY.md and history.csv to examples/nike/latest/.
+on:
+  schedule:
+    - cron: "0 7 * * 1"          # Mondays 07:00 UTC
+  workflow_dispatch: {}           # "Run workflow" button on the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install Python packages
+        run: pip install -r requirements.txt
+      - name: Install LibreOffice (for the PDF version of the deck)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends libreoffice-impress
+      - name: Run the Nike case
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+        run: python -m t2t --run config/runs/nike.yaml --out examples/nike/latest --track
+      - name: Convert deck to PDF
+        run: soffice --headless --convert-to pdf --outdir examples/nike/latest examples/nike/latest/NKE_pitch_deck.pptx
+      - name: Commit refreshed outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add examples/nike/latest
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "Weekly refresh: Nike $(date -u +%Y-%m-%d)"
+          git push
