@@ -3,14 +3,28 @@ ticker: NKE
 peers: [LULU, DECK, CROX, UAA, VFC, COLM]
 analyst: Abhishek Raut
 
-# Optional: your own view. Leave lists empty to use the model-derived thesis/risks in the deck.
-# Write these AFTER you've looked at the numbers; keep each point to one or two lines.
-analyst_view:
-  thesis: []        # e.g. - "Inventory reset is largely done: ..."
-  catalysts: []     # e.g. - "Q2 FY27 results (Dec): wholesale order book ..."
-  risks: []         # e.g. - "Tariffs on Vietnam/Indonesia sourcing ..."
+# Base case anchored to management's FY27 guidance (Q1 FY27 release, 1 Oct 2026), then a margin rebuild
+# as the ~$2.5bn "Pace" savings plan lands by FY31. Year 1 = FY27 ... Year 5 = FY31.
+overrides:
+  revenue_growth: [-0.08, 0.02, 0.04, 0.05, 0.04]
+  ebit_margin: [0.05, 0.07, 0.09, 0.105, 0.115]
+  tax_rate: 0.24
+  notes:
+    revenue_growth: "FY27 = guidance (revenue down high-single digits, Q1 FY27 release); modest recovery thereafter as China stabilises."
+    ebit_margin: "FY27 ~5% implied by adj. EPS guidance of $1.15-1.35; rebuilds to 11.5% by FY31 as ~$2.5bn Pace savings land (below FY21-24 avg of ~13.5%)."
+    tax_rate: "Management guides a mid-20s effective tax rate for FY27."
 
-# Optional: override model assumptions (see valuation.Assumptions), e.g.
-# overrides:
-#   terminal_growth: 0.025
-#   exit_multiple: 14.0
+# Your view, in your own words. Shown in the deck instead of the model-derived text.
+analyst_view:
+  thesis:
+    - "The turnaround is already in the price: at ~$34, the market discounts EBIT margins rebuilding to ~11% by FY31. That is our base case too, so we see fair value, not a bargain."
+    - "FY27 is a reset year: management guides revenue down high-single digits and adj. EPS of $1.15-1.35. We model -8% revenue and a ~5% EBIT margin."
+    - "Self-help is real but back-end loaded: ~$2.5bn of Pace savings by FY31, inventory down 3% y/y and gross margin up 60bp in Q1 support the rebuild; China (-22% in Q1) is the swing factor."
+  catalysts:
+    - "Q2 FY27 results (expected late December): first read on China and holiday sell-through."
+    - "Signs that Greater China declines are bottoming."
+    - "Delivery of Pace savings as restructuring charges roll off."
+  risks:
+    - "China keeps falling: margins stall near 7% and value drops to ~$22 (our 'stuck' case)."
+    - "Share loss to challenger running brands (On, Hoka) limits pricing power."
+    - "Execution slips: with recovery already priced in, there is little cushion for delays."

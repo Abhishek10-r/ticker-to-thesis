@@ -269,11 +269,12 @@ def shift_assumptions(a: Assumptions, growth=0.0, margin=0.0, wacc=0.0, terminal
 def apply_overrides(a: Assumptions, ov: dict | None) -> Assumptions:
     if not ov: return a
     b = copy.deepcopy(a)
+    notes = ov.get("notes") or {}
     for k, v in ov.items():
-        if v is None: continue
+        if v is None or k == "notes": continue
         if k in ("revenue_growth", "ebit_margin") and np.isscalar(v): v = [v] * b.years
         setattr(b, k, list(v) if isinstance(v, (list, tuple, np.ndarray)) else float(v))
-        b.notes[k] = "User override."
+        b.notes[k] = notes.get(k, "Analyst override.")
     return b
 
 
